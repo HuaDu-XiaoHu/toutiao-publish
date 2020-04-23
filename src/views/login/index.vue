@@ -87,7 +87,7 @@ export default {
   methods: {
     onLogin () {
       // 获取表单数据
-      console.log(1)
+      // console.log(1)
       // const user = this.user
       // 表单验证
       // console.log(this.$refs['login-form'])
@@ -103,11 +103,11 @@ export default {
     },
     login () {
       // 开启登录中loading...
-      console.log(0)
+      // console.log(0)
       this.loginLoading = true
       console.log(this.user, login1)
       login1(this.user).then(res => {
-        console.log(res)
+        // console.log(res)
         // console.log(err)
         this.$message({
           message: '登录成功',
@@ -119,9 +119,9 @@ export default {
         this.$router.push({
           name: 'home'
         })
-      }).catch(err => {
+      }).catch(() => {
         // 失败
-        console.log(err)
+        // console.log(err)
         this.$message.error('登录失败')
       })
       // 关闭loading...
