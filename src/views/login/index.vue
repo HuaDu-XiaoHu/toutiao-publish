@@ -107,7 +107,7 @@ export default {
       this.loginLoading = true
       console.log(this.user, login1)
       login1(this.user).then(res => {
-        // console.log(res)
+        console.log(res)
         // console.log(err)
         this.$message({
           message: '登录成功',
@@ -115,13 +115,15 @@ export default {
         })
         // 关闭loading...
         this.loginLoading = false
+        // 返回的数据保存到本地
+        window.localStorage.setItem('user', JSON.stringify(res.data.data))
         // 跳转到首页
         this.$router.push({
           name: 'home'
         })
-      }).catch(() => {
+      }).catch(err => {
         // 失败
-        // console.log(err)
+        console.log(err)
         this.$message.error('登录失败')
       })
       // 关闭loading...
