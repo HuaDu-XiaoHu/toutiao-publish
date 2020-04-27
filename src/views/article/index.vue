@@ -62,15 +62,24 @@
                   style="width: 100%"
                   class="list-table"
                   size="mini">
-          <el-table-column prop="date"
-                           label="封面">
+          <el-table-column label="封面">
+            <template slot-scope="scope">
+              <img v-if="scope.row.cover.images[0]"
+                   class="article-cover"
+                   :src="scope.row.cover.images[0]"
+                   alt="">
+              <img v-else
+                   class="article-cover"
+                   src="./no-cover.gif"
+                   alt="">
+            </template>
           </el-table-column>
           <el-table-column prop="title"
                            label="标题">
           </el-table-column>
           <el-table-column label="状态">
             <template slot-scope="scope">
-              <el-tag :type="artcleStatus[scope.row.start].type">{{artcleStatus[scope.row.start].text}}</el-tag>
+              <el-tag :type="articleStatus[scope.row.status].type">{{articleStatus[scope.row.status].text}}</el-tag>
               <!-- <el-tag v-if="scope.row.status===0">草稿</el-tag>
               <el-tag v-else-if="scope.row.status===1">待审核</el-tag>
               <el-tag type="success"
@@ -99,7 +108,9 @@
         </el-table>
         <el-pagination background
                        layout="prev, pager, next"
-                       :total="1000">
+                       :total="totalCount"
+                       @current-change="onCurrentChange"
+                       :page-size="pageSize">
         </el-pagination>
       </template>
 
@@ -135,7 +146,9 @@ export default {
         { status: 2, text: '审核通过', type: 'warning' },
         { status: 3, text: '审核失败', type: 'success' },
         { status: 4, text: '已删除', type: 'danger' }
-      ]
+      ],
+      totalCount: 0,
+      pageSize: 20
     }
   },
   // created生命周期
@@ -143,14 +156,22 @@ export default {
     this.loadArticle()
   },
   methods: {
-    loadArticle () {
-      getArticle().then(res => {
+    loadArticle (page = 1) {
+      getArticle({
+        page,
+        per_page: this.pageSize
+      }).then(res => {
         // console.log(res)
-        this.articles = res.data.data.results
+        const { results, total_count: totalCount } = res.data.data
+        this.articles = results
+        this.totalCount = totalCount
       })
     },
     onSubmit () {
       console.log('submit!')
+    },
+    onCurrentChange (page) {
+      this.loadArticle(page)
     }
 
   }
@@ -162,5 +183,9 @@ export default {
 }
 .list-table {
   margin-bottom: 20px;
+}
+.article-cover {
+  width: 80px;
+  background-size: cover;
 }
 </style>
