@@ -9,3 +9,12 @@ export const getArticle = params => {
     params
   })
 }
+// 获取文章频道
+// 封转函数
+export const getArticleChannels = params => {
+  return request({
+    method: 'GET',
+    url: '/mp/v1_0/channels',
+    params
+  })
+}

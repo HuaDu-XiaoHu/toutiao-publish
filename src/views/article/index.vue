@@ -16,37 +16,40 @@
                  label-width="40px"
                  size="mini">
           <el-form-item label="状态">
-            <el-radio-group v-model="form.resource">
-              <el-radio label="全部"></el-radio>
-              <el-radio label="草稿"></el-radio>
-              <el-radio label="待审核"></el-radio>
-              <el-radio label="审核通过"></el-radio>
-              <el-radio label="审核失败"></el-radio>
-              <el-radio label="已删除"></el-radio>
+            <el-radio-group v-model="status">
+              <el-radio :label="null">全部</el-radio>
+              <el-radio :label="0">草稿</el-radio>
+              <el-radio :label="1">待审核</el-radio>
+              <el-radio :label="2">审核通过</el-radio>
+              <el-radio :label="3">审核失败</el-radio>
+              <el-radio :label="4">已删除</el-radio>
             </el-radio-group>
           </el-form-item>
 
           <el-form-item label="频道">
-            <el-select v-model="form.region"
+            <el-select v-model="channelId"
                        placeholder="请选择频道">
-              <el-option label="区域一"
-                         value="shanghai"></el-option>
-              <el-option label="区域二"
-                         value="beijing"></el-option>
+              <el-option label="全部"
+                         :value="null"></el-option>
+              <el-option :label="channel.name"
+                         :value="channel.id"
+                         v-for="(channel,index) in channels"
+                         :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="日期">
-            <el-date-picker v-model="form.date1"
+            <el-date-picker v-model="rangeDate"
                             type="datetimerange"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期"
-                            :default-time="['12:00:00']">
+                            :default-time="['12:00:00']"
+                            format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd">
             </el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
-                       @click="onSubmit">立即创建</el-button>
-            <el-button>取消</el-button>
+                       @click="loadArticle(1)">查询</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -54,7 +57,7 @@
     <el-card class="box-card">
       <div slot="header"
            class="clearfix">
-        根据筛选条件共查询到4147条结果：
+        根据筛选条件共查询到{{totalCount}}条结果：
       </div>
       <template>
         <el-table :data="articles"
@@ -122,7 +125,7 @@
 
 <script>
 // 加载请求方法
-import { getArticle } from '@/api/article'
+import { getArticle, getArticleChannels } from '@/api/article'
 export default {
 
   name: 'ArticleIndex',
@@ -148,18 +151,32 @@ export default {
         { status: 4, text: '已删除', type: 'danger' }
       ],
       totalCount: 0,
-      pageSize: 20
+      // 每页的大小
+      pageSize: 20,
+      // 查询文章的状态，
+      status: null,
+      // 文章频道列表
+      channels: [],
+      // 查询文章的频道
+      channelId: null,
+      // 请求日期
+      rangeDate: null
     }
   },
   // created生命周期
   created () {
+    this.loadChannels()
     this.loadArticle()
   },
   methods: {
     loadArticle (page = 1) {
       getArticle({
         page,
-        per_page: this.pageSize
+        per_page: this.pageSize,
+        status: this.status,
+        channel_id: this.channelId,
+        begin_pubdate: this.rangeDate ? this.rangeDate[0] : null,
+        end_pubdate: this.rangeDate ? this.rangeDate[1] : null
       }).then(res => {
         // console.log(res)
         const { results, total_count: totalCount } = res.data.data
@@ -172,8 +189,13 @@ export default {
     },
     onCurrentChange (page) {
       this.loadArticle(page)
+    },
+    loadChannels () {
+      getArticleChannels().then(res => {
+        console.log(res)
+        this.channels = res.data.data.channels
+      })
     }
-
   }
 }
 </script>
