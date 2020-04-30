@@ -18,3 +18,10 @@ export const getArticleChannels = params => {
     params
   })
 }
+// 删除
+export const deleteArticle = articleId => {
+  return request({
+    method: 'DELETE',
+    url: `/mp/v1_0/articles/${articleId}`
+  })
+}

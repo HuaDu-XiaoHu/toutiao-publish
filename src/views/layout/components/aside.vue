@@ -7,7 +7,7 @@
            router
            :collapse="isCollapse">
 
-    <el-menu-item index="/">
+    <el-menu-item index="/home">
       <i class="el-icon-s-home"></i>
       <span slot="title">首页</span>
     </el-menu-item>
@@ -19,11 +19,11 @@
       <i class="iconfont iconimage"></i>
       <span slot="title">素材管理</span>
     </el-menu-item>
-    <el-menu-item index="iconpublish">
+    <el-menu-item index="publish">
       <i class="iconfont iconpublish"></i>
       <span slot="title">发布文章</span>
     </el-menu-item>
-    <el-menu-item index="/iconcomment">
+    <el-menu-item index="/comment">
       <i class="iconfont iconcomment"></i>
       <span slot="title">评论管理</span>
     </el-menu-item>

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login/'
 import Home from '@/views/home/'
 import Article from '@/views/article'
+import Publish from '@/views/publish'
 // 配置layout路由
 import Layout from '@/views/layout'
 
@@ -28,6 +29,11 @@ const routes = [
         path: '/article',
         name: 'article',
         component: Article
+      },
+      {
+        path: '/publish',
+        name: 'publish',
+        component: Publish
       }
     ]
   }
@@ -44,11 +50,11 @@ router.beforeEach((to, from, next) => {
   const user = window.localStorage.getItem('user')
   // console.log(user)
   // 校验非登录页面的登录状态
-  console.log(to.path)
+  // console.log(to.path)
   if (to.path !== '/login') {
     // console.log(2)
     if (user) {
-      console.log(user)
+      // console.log(user)
       // console.log(3)
       next()
     } else {

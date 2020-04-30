@@ -49,6 +49,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
+                       :disabled="loading"
                        @click="loadArticle(1)">查询</el-button>
           </el-form-item>
         </el-form>
@@ -64,7 +65,8 @@
                   stripe
                   style="width: 100%"
                   class="list-table"
-                  size="mini">
+                  size="mini"
+                  v-loading="loading">
           <el-table-column label="封面">
             <template slot-scope="scope">
               <img v-if="scope.row.cover.images[0]"
@@ -97,7 +99,7 @@
                            label="发布时间">
           </el-table-column>
           <el-table-column label="操作">
-            <template>
+            <template slot-scope="scope">
               <el-button size="mini"
                          circle
                          type="primary"
@@ -105,6 +107,7 @@
               <el-button size="mini"
                          type="danger"
                          icon="el-icon-delete"
+                         @click="onDeleteArticle(scope.row.id)"
                          circle></el-button>
             </template>
           </el-table-column>
@@ -113,7 +116,9 @@
                        layout="prev, pager, next"
                        :total="totalCount"
                        @current-change="onCurrentChange"
-                       :page-size="pageSize">
+                       :disabled="loading"
+                       :page-size="pageSize"
+                       :current-page.sync="page">
         </el-pagination>
       </template>
 
@@ -125,7 +130,7 @@
 
 <script>
 // 加载请求方法
-import { getArticle, getArticleChannels } from '@/api/article'
+import { getArticle, getArticleChannels, deleteArticle } from '@/api/article'
 export default {
 
   name: 'ArticleIndex',
@@ -160,7 +165,11 @@ export default {
       // 查询文章的频道
       channelId: null,
       // 请求日期
-      rangeDate: null
+      rangeDate: null,
+      // 表格数据加载
+      loading: true,
+      // 当前页码
+      page: 1
     }
   },
   // created生命周期
@@ -170,6 +179,8 @@ export default {
   },
   methods: {
     loadArticle (page = 1) {
+      // 请求一开始开启loading中
+      this.loading = true
       getArticle({
         page,
         per_page: this.pageSize,
@@ -182,6 +193,9 @@ export default {
         const { results, total_count: totalCount } = res.data.data
         this.articles = results
         this.totalCount = totalCount
+
+        // 请求结束关闭加载中loading
+        this.loading = false
       })
     },
     onSubmit () {
@@ -192,8 +206,37 @@ export default {
     },
     loadChannels () {
       getArticleChannels().then(res => {
-        console.log(res)
+        // console.log(res)
         this.channels = res.data.data.channels
+      })
+    },
+    onDeleteArticle (articleId) {
+      // console.log(articleId.toString())
+      this.$confirm('确认删除吗？', '删除提示', {
+        confimButtonTexr: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteArticle(articleId.toString()).then(res => {
+          // console.log(res)
+          this.loadArticle(this.page)
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+        }).catch((err) => {
+          console.log(err)
+          this.$message({
+            type: 'info',
+            message: '删除失败'
+          })
+        })
+      }).catch((err) => {
+        console.log(err)
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     }
   }
