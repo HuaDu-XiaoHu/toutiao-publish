@@ -15,7 +15,7 @@
       <i class="el-icon-document"></i>
       <span slot="title">内容管理</span>
     </el-menu-item>
-    <el-menu-item index="/imag">
+    <el-menu-item index="/image">
       <i class="iconfont iconimage"></i>
       <span slot="title">素材管理</span>
     </el-menu-item>

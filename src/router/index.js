@@ -4,6 +4,7 @@ import Login from '@/views/login/'
 import Home from '@/views/home/'
 import Article from '@/views/article'
 import Publish from '@/views/publish'
+import Image from '@/views/image'
 // 配置layout路由
 import Layout from '@/views/layout'
 
@@ -34,6 +35,11 @@ const routes = [
         path: '/publish',
         name: 'publish',
         component: Publish
+      },
+      {
+        path: '/image',
+        name: 'image',
+        component: Image
       }
     ]
   }

@@ -103,6 +103,7 @@
               <el-button size="mini"
                          circle
                          type="primary"
+                         @click="$router.push('/publish?id='+scope.row.id)"
                          icon="el-icon-edit"></el-button>
               <el-button size="mini"
                          type="danger"
@@ -130,7 +131,7 @@
 
 <script>
 // 加载请求方法
-import { getArticle, getArticleChannels, deleteArticle } from '@/api/article'
+import { getArticles, getArticleChannels, deleteArticle } from '@/api/article'
 export default {
 
   name: 'ArticleIndex',
@@ -181,7 +182,7 @@ export default {
     loadArticle (page = 1) {
       // 请求一开始开启loading中
       this.loading = true
-      getArticle({
+      getArticles({
         page,
         per_page: this.pageSize,
         status: this.status,
