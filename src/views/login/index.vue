@@ -131,21 +131,21 @@ export default {
         // console.log('onLogin')
       }
 
-      const res = await login1(this.user)
-      // console.log(res)
-      // console.log(err)  // 登录成功
-      this.$message({
-        message: '登录成功',
-        type: 'success'
-      })
-      // 关闭loading...
-      this.loginLoading = false
-      // 返回的数据保存到本地
-      window.localStorage.setItem('user', JSON.stringify(res.data.data))
-      // 跳转到首页
-      this.$router.push({
-        name: 'home'
-      })
+      // const res = await login1(this.user)
+      // // console.log(res)
+      // // console.log(err)  // 登录成功
+      // this.$message({
+      //   message: '登录成功',
+      //   type: 'success'
+      // })
+      // // 关闭loading...
+      // this.loginLoading = false
+      // // 返回的数据保存到本地
+      // window.localStorage.setItem('user', JSON.stringify(res.data.data))
+      // // 跳转到首页
+      // this.$router.push({
+      //   name: 'home'
+      // })
 
 
 
