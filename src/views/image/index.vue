@@ -8,10 +8,11 @@
       </el-breadcrumb>
     </div>
     <div style="padding-bottom:20px;">
-      <el-radio-group v-model="radio1"
+      <el-radio-group v-model="collect"
+                      @change="onCollectChange"
                       size="mini">
-        <el-radio-button label="全部"></el-radio-button>
-        <el-radio-button label="收藏"></el-radio-button>
+        <el-radio-button :label="false">全部</el-radio-button>
+        <el-radio-button :label="true">收藏</el-radio-button>
       </el-radio-group>
     </div>
     <!-- 图片 -->
@@ -19,49 +20,11 @@
       <el-col :xs="12"
               :sm="6"
               :md="6"
-              :lg="4">
+              :lg="4"
+              v-for="(img,index) in images"
+              :key="index">
         <el-image style="height: 100px"
-                  src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                  fit="cover"></el-image>
-      </el-col>
-      <el-col :xs="12"
-              :sm="6"
-              :md="6"
-              :lg="4">
-        <el-image style="height: 100px"
-                  src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                  fit="cover"></el-image>
-      </el-col>
-      <el-col :xs="12"
-              :sm="6"
-              :md="6"
-              :lg="4">
-        <el-image style="height: 100px"
-                  src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                  fit="cover"></el-image>
-      </el-col>
-      <el-col :xs="12"
-              :sm="6"
-              :md="6"
-              :lg="4">
-        <el-image style=" height: 100px"
-                  src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                  fit="cover"></el-image>
-      </el-col>
-      <el-col :xs="12"
-              :sm="6"
-              :md="6"
-              :lg="4">
-        <el-image style=" height: 100px"
-                  src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                  fit="cover"></el-image>
-      </el-col>
-      <el-col :xs="12"
-              :sm="6"
-              :md="6"
-              :lg="4">
-        <el-image style="height: 100px"
-                  src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                  :src="img.url"
                   fit="cover"></el-image>
       </el-col>
 
@@ -71,16 +34,35 @@
 </template>
 
 <script>
+import { getImages } from '@/api/image'
 export default {
   name: 'ImageIndex',
   components: {},
   props: {},
   data () {
-    return { radio1: '全部' }
+    return {
+      collect: '全部',
+      images: []
+    }
   },
   computed: {},
-  created () { },
-  methods: {}
+  created () {
+    this.loadImages(false)
+  },
+  methods: {
+    loadImages (collect = false) {
+      getImages({
+        collect
+      }).then(res => {
+        // console.log(res)
+        this.images = res.data.data.results
+      })
+    },
+    onCollectChange (value) {
+      console.log(value)
+      this.loadImages(value)
+    }
+  }
 }
 </script>
 
