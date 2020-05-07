@@ -109,7 +109,7 @@ export default {
       try {
         const res = await login1(this.user)
         // console.log(res)
-        // console.log(err)  
+        // console.log(err)
         // 登录成功
         this.$message({
           message: '登录成功',
@@ -146,9 +146,6 @@ export default {
       // this.$router.push({
       //   name: 'home'
       // })
-
-
-
     }
   }
 }
